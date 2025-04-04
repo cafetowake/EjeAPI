@@ -1,9 +1,19 @@
 <?php
 header('Content-Type: application/json');
-require __DIR__ . 'db.php';
 
-$pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$DB_HOST = 'localhost';
+$DB_NAME = 'ejeapi';
+$DB_USER = 'paula';
+$DB_PASS = '1806';
+
+try {
+    $pdo = new PDO("mysql:host=$DB_HOST;dbname=$DB_NAME;charset=utf8", $DB_USER, $DB_PASS);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(["error" => "Error de conexión a la base de datos: " . $e->getMessage()]);
+    exit;
+}
 
 $method = $_SERVER['REQUEST_METHOD'];
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -14,7 +24,7 @@ $pathSegments = explode('/', trim($cleanPath, '/'));
 try {
     switch ($method) {
         case 'POST':
-            if ($pathSegments === ['incidents']) {
+            if ($pathSegments[0] === 'incidents' && count($pathSegments) === 1) {
                 $data = json_decode(file_get_contents('php://input'), true);
                 if (json_last_error() !== JSON_ERROR_NONE) {
                     http_response_code(400);
@@ -43,17 +53,16 @@ try {
                 
                 http_response_code(201);
                 echo json_encode($newIncident);
-            } else {
-                http_response_code(404);
-                echo json_encode(["error" => "Endpoint no encontrado"]);
+                exit;
             }
             break;
 
         case 'GET':
-            if ($pathSegments === ['incidents']) {
+            if ($pathSegments[0] === 'incidents' && count($pathSegments) === 1) {
                 $stmt = $pdo->query("SELECT * FROM incidents ORDER BY created_at DESC");
                 echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
-            } elseif (count($pathSegments) === 2 && $pathSegments[0] === 'incidents') {
+                exit;
+            } elseif ($pathSegments[0] === 'incidents' && count($pathSegments) === 2) {
                 $incidentId = $pathSegments[1];
                 if (!ctype_digit($incidentId)) {
                     http_response_code(400);
@@ -71,14 +80,12 @@ try {
                     http_response_code(404);
                     echo json_encode(["error" => "Incidente no encontrado"]);
                 }
-            } else {
-                http_response_code(404);
-                echo json_encode(["error" => "Endpoint no encontrado"]);
+                exit;
             }
             break;
 
         case 'PUT':
-            if (count($pathSegments) === 2 && $pathSegments[0] === 'incidents') {
+            if ($pathSegments[0] === 'incidents' && count($pathSegments) === 2) {
                 $incidentId = $pathSegments[1];
                 if (!ctype_digit($incidentId)) {
                     http_response_code(400);
@@ -119,14 +126,12 @@ try {
                     http_response_code(404);
                     echo json_encode(["error" => "Incidente no encontrado"]);
                 }
-            } else {
-                http_response_code(404);
-                echo json_encode(["error" => "Endpoint no encontrado"]);
+                exit;
             }
             break;
 
         case 'DELETE':
-            if (count($pathSegments) === 2 && $pathSegments[0] === 'incidents') {
+            if ($pathSegments[0] === 'incidents' && count($pathSegments) === 2) {
                 $incidentId = $pathSegments[1];
                 if (!ctype_digit($incidentId)) {
                     http_response_code(400);
@@ -145,18 +150,21 @@ try {
                 $stmt = $pdo->prepare("DELETE FROM incidents WHERE id = ?");
                 $stmt->execute([$incidentId]);
                 echo json_encode(["success" => "Incidente eliminado"]);
-            } else {
-                http_response_code(404);
-                echo json_encode(["error" => "Endpoint no encontrado"]);
+                exit;
             }
             break;
 
         default:
             http_response_code(405);
             echo json_encode(["error" => "Método no permitido"]);
+            exit;
     }
+    
+    http_response_code(404);
+    echo json_encode(["error" => "Endpoint no encontrado"]);
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(["error" => "Error de base de datos: " . $e->getMessage()]);
+    exit;
 }
 ?>

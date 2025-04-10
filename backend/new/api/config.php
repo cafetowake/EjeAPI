@@ -4,7 +4,6 @@ $dbname = 'ejeapi';
 $username = 'paula';
 $password = '1806';
 
-
 try {
     $pdo = new PDO(
         "mysql:host=$host;dbname=$dbname;port=1806;charset=utf8mb4",
@@ -18,7 +17,6 @@ try {
 } catch (PDOException $e) {
     die(json_encode([
         "status" => "error",
-        "message" => "Error de conexión a la base de datos: " . $e->getMessage()
+        "message" => "Error de conexión: " . $e->getMessage()
     ]));
 }
-?>

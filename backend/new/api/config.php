@@ -1,8 +1,8 @@
 <?php
 $host = '127.0.0.1';
 $dbname = 'gdi';
-$username = 'paula';
-$password = '1806';
+$username = '';
+$password = '';
 
 try {
     $pdo = new PDO(

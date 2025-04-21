@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     body.appendChild(mainTitle);
     body.appendChild(container);
 
-    const API_URL = 'http://localhost:8000/incidents';
+    const API_URL = '/incidents';
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();

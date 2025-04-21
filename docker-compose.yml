@@ -23,9 +23,9 @@ services:
       - app-network
 
   db:
-    image: mysql:8.0
+    image: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_PORT: 1806
       MYSQL_DATABASE: gdi
       MYSQL_USER: paula
       MYSQL_PASSWORD: 1806

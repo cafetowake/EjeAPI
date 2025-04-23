@@ -46,7 +46,6 @@ services:
   db:
     image: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 1806
       MYSQL_DATABASE: gdi
       MYSQL_USER: paula
       MYSQL_PASSWORD: 1806

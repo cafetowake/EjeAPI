@@ -10,6 +10,4 @@ RUN apk update && apk add --no-cache curl iputils
 
 EXPOSE 3000
 
-RUN npm install
-
 CMD ["npm", "run", "dev", "--", "--host"]

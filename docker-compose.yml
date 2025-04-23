@@ -2,9 +2,9 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: ./docker/back/Dockerfile
+      dockerfile: Dockerfile
     volumes:
-      - ./back:/var/www/html/
+      - ./backend:/var/www/html/
       - dbdata:/var/lib/mysql
     networks:
       - app-network
@@ -16,7 +16,7 @@ services:
   frontend:
     build:
       context: ./docker/front
-      dockerfile: ../docker/front/Dockerfile
+      dockerfile: Dockerfile
     volumes:
       - ./frontend:/var/www/html/
       - /app/node_modules

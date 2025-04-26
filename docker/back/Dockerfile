@@ -1,16 +1,6 @@
 FROM php:8.2-apache
 
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip \
-    libpq-dev \
-  && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd \
-  && rm -rf /var/lib/apt/lists/
+RUN docker-php-ext-install pdo pdo_mysql 
 
 RUN a2enmod rewrite
 
@@ -23,7 +13,3 @@ RUN mkdir -p storage bootstrap/cache \
  && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 80
-
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]

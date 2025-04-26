@@ -1,15 +1,9 @@
-FROM node:18-alpine
+FROM nginx:alpine
 
-WORKDIR /app
-
-COPY package*.json ./
-
-RUN npm install
+WORKDIR /usr/share/nginx/html
 
 COPY . .
 
-RUN apk update && apk add --no-cache curl iputils
+EXPOSE 80
 
-EXPOSE 3000
-
-CMD ["npm", "run", "dev", "--", "--host"]
+CMD ["nginx", "-g", "daemon off;"]

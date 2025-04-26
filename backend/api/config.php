@@ -1,6 +1,6 @@
 <?php
-$host = '127.0.0.1';
-$dbname = 'gdi';
+$host = 'db';
+$dbname = 'ejeapi';
 $username = 'paula';
 $password = '1806';
 

@@ -1,6 +1,7 @@
 <?php
-$host = 'db';
-$dbname = 'ejeapi';
+
+$host = 'host.docker.internal';
+$dbname = 'gdi';
 $username = 'paula';
 $password = '1806';
 

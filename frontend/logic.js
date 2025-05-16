@@ -154,7 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
     body.appendChild(mainTitle);
     body.appendChild(container);
 
-    const API_URL = '/incidents';
+    // Siempre usar el backend directo, sin proxy nginx
+    const API_URL = 'http://localhost:9000/api/incidents';
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
